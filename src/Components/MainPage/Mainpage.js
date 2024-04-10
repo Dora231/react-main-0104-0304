@@ -6,6 +6,7 @@ import { Modal, Button, Form, Input } from 'antd';
 export default function MainPage() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
+  const [theme, setTheme] = useState('light');
   const dispatch = useDispatch();
   const todos = useSelector((state) => state.todos);
 
@@ -14,6 +15,11 @@ export default function MainPage() {
       dispatch(fetchTodosAction());
     }
   }, [dispatch, isRegistered]);
+
+  useEffect(() => {
+    document.body.style.backgroundColor = theme === 'light' ? 'white' : 'black';
+    document.body.style.color = theme === 'light' ? 'black' : 'white';
+  }, [theme]);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -29,10 +35,17 @@ export default function MainPage() {
     setIsModalVisible(false);
   };
 
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
   return (
     <>
       <Button type="primary" onClick={showModal}>
         Регистрация
+      </Button>
+      <Button onClick={toggleTheme}>
+        Сменить тему
       </Button>
       <Modal title="Регистрация" visible={isModalVisible} footer={null} onCancel={handleCancel}>
         <Form
